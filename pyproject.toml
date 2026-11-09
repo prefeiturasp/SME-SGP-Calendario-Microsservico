@@ -1,0 +1,44 @@
+[project]
+name = "SME-SGP-Calendario-Microsservico"
+version = "0.1.0"
+description = "Microsservico do Calendario Escolar do SGP"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "SME" }]
+
+[tool.black]
+line-length = 79
+target-version = ["py312"]
+extend-exclude = "/migrations/"
+
+[tool.ruff]
+line-length = 79
+target-version = "py312"
+extend-exclude = ["migrations"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM", "D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.mypy]
+python_version = "3.12"
+files = ["apps", "config"]
+exclude = ['/migrations/']
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+disallow_untyped_defs = true
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings"
+
+[tool.coverage.run]
+source = ["apps"]
+omit = ["*/migrations/*", "*/tests/*"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
