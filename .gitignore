@@ -1,0 +1,36 @@
+# Ambiente e segredos (nunca commitar)
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Ambientes virtuais
+.venv/
+venv/
+
+# Cobertura e caches de ferramentas
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.mypy_cache/
+.ruff_cache/
+
+# Django
+staticfiles/
+*.sqlite3
+
+# Sphinx
+docs/_build/
+
+# Editores e sistema operacional
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
