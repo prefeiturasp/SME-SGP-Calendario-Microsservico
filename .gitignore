@@ -34,3 +34,6 @@ docs/_build/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Schema OpenAPI gerado pelo make schema
+schema.yml
