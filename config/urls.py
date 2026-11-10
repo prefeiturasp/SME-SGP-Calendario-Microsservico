@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny
 
 urlpatterns = [
     path("api/v1/", include("apps.core.api.urls")),
+    path("api/v1/calendario/", include("apps.calendario.api.urls")),
     path(
         "api/v1/schema/",
         SpectacularAPIView.as_view(
