@@ -18,3 +18,4 @@ pre-commit>=3.8,<4
 
 # Documentacao
 sphinx>=8.1,<9
+sphinx-rtd-theme>=3,<4
