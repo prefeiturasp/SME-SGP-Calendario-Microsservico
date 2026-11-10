@@ -1,10 +1,11 @@
 """Rotas raiz do SME-SGP-Calendario-Microsservico."""
 
-from django.urls import path
+from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.permissions import AllowAny
 
 urlpatterns = [
+    path("api/v1/", include("apps.core.api.urls")),
     path(
         "api/v1/schema/",
         SpectacularAPIView.as_view(
