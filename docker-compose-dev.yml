@@ -1,0 +1,34 @@
+services:
+  calendario:
+    image: sme-sgp-calendario-microsservico-dev
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - "${PORT_WEB}:8000"
+      - "${PORT_DEBUGPY}:5678"
+    depends_on:
+      banco:
+        condition: service_healthy
+
+  banco:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - dados_banco:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  dados_banco:

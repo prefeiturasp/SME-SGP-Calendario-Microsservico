@@ -1,0 +1,12 @@
+services:
+  calendario:
+    image: sme-sgp-calendario-microsservico
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "${PORT_WEB}:8000"
+    restart: unless-stopped
