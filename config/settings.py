@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "apps.core",
     "apps.calendario",
+    "apps.eventos",
 ]
 
 MIDDLEWARE = [
@@ -110,15 +111,16 @@ def _url_para_bd(url: str) -> dict[str, Any]:
     }
 
 
-DATABASES = {
-    "default": _url_para_bd(os.environ.get("URL_BANCO_CALENDARIO", "")),
-}
-
-# SQLite em memória durante os testes.
 if "test" in sys.argv or _ler_booleano("USE_SQLITE_TEST"):
-    DATABASES["default"] = {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": ":memory:",
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",
+        }
+    }
+else:
+    DATABASES = {
+        "default": _url_para_bd(os.environ.get("URL_BANCO_CALENDARIO", "")),
     }
 
 LANGUAGE_CODE = "pt-br"

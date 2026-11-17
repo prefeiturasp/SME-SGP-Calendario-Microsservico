@@ -14,6 +14,7 @@ repos:
     rev: v1.11.2
     hooks:
       - id: mypy
+        entry: env URL_BANCO_CALENDARIO= mypy
         exclude: (^|/)migrations/
         additional_dependencies:
           - "django-stubs==5.0.4"

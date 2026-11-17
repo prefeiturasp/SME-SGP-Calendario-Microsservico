@@ -119,3 +119,4 @@ Cada requisição passa pelas camadas na mesma ordem:
 
 - ``apps/core``: autenticação por API Key e endpoint de health.
 - ``apps/calendario``: domínio do Calendário Escolar.
+- ``apps/eventos``: eventos do Calendário Escolar.
