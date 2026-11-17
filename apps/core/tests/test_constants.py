@@ -2,7 +2,7 @@
 
 from django.test import SimpleTestCase
 
-from apps.core.constantes import (
+from apps.core.constants import (
     LETIVO_INFORMATIVOS,
     EventoLetivo,
     LocalOcorrencia,
