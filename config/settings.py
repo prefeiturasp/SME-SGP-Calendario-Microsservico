@@ -107,6 +107,7 @@ def _url_para_bd(url: str) -> dict[str, Any]:
         "PASSWORD": urllib.parse.unquote(partes.password or ""),
         "HOST": partes.hostname or "",
         "PORT": str(partes.port or ""),
+        "OPTIONS": {"options": "-c search_path=calendario,public"},
         "POOL_OPTIONS": _POOL_OPTIONS,
     }
 
