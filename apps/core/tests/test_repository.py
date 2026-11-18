@@ -55,6 +55,22 @@ class TestRepositorioBase(TransactionTestCase):
                 {"nome": "Segundo", "codigo_uuid": codigo_uuid}
             )
 
+    def test_obter_por_id_retorna_registro_ativo(self) -> None:
+        """Consulta um registro ativo pelo identificador."""
+        registro = self.repositorio.inserir({"nome": "Evento"})
+
+        encontrado = self.repositorio.obter_por_id(registro["id"])
+
+        self.assertEqual(encontrado, registro)
+
+    def test_obter_por_id_rejeita_registro_excluido(self) -> None:
+        """Não retorna um registro excluído logicamente."""
+        registro = self.repositorio.inserir({"nome": "Evento"})
+        self.repositorio.excluir([registro["id"]])
+
+        with self.assertRaises(RegistroTeste.DoesNotExist):
+            self.repositorio.obter_por_id(registro["id"])
+
     def test_listar_retorna_pagina_somente_com_registros_ativos(self) -> None:
         """Pagina registros ativos e informa o total antes do recorte."""
         self.repositorio.inserir({"nome": "Primeiro"})
