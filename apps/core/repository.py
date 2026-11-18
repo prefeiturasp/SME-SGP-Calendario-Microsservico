@@ -91,6 +91,21 @@ class RepositorioBase(Generic[ModeloT]):
         instancia.save()
         return self._obter_dados(instancia.pk)
 
+    def obter_por_id(self, identificador: object) -> dict[str, object]:
+        """Obtém um registro ativo pelo identificador.
+
+        Args:
+            identificador: Chave primária do registro.
+
+        Returns:
+            Registro persistido no formato de dicionário.
+
+        Raises:
+            ObjectDoesNotExist: Quando o registro não existe ou está
+                excluído logicamente.
+        """
+        return self._obter_dados(identificador, somente_ativos=True)
+
     def atualizar(
         self,
         identificador: object,
@@ -146,7 +161,26 @@ class RepositorioBase(Generic[ModeloT]):
         )
         return quantidade
 
-    def _obter_dados(self, identificador: object) -> dict[str, object]:
-        """Obtém todos os campos persistidos de um registro."""
-        registro = self.gerenciador.values().get(pk=identificador)
+    def _obter_dados(
+        self,
+        identificador: object,
+        somente_ativos: bool = False,
+    ) -> dict[str, object]:
+        """Obtém todos os campos persistidos de um registro.
+
+        Args:
+            identificador: Chave primária do registro.
+            somente_ativos: Indica se registros excluídos devem ser
+                desconsiderados.
+
+        Returns:
+            Registro persistido no formato de dicionário.
+
+        Raises:
+            ObjectDoesNotExist: Quando nenhum registro atende aos filtros.
+        """
+        filtros = {"pk": identificador}
+        if somente_ativos:
+            filtros["excluido"] = False
+        registro = self.gerenciador.values().get(**filtros)
         return cast(dict[str, object], registro)

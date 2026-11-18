@@ -1,6 +1,7 @@
 """Models compartilhados entre os apps."""
 
 from django.db import models
+from django.db.models.functions import Now
 from django.utils import timezone
 
 from apps.core.auditoria import SISTEMA, UsuarioAuditoria
@@ -9,14 +10,14 @@ from apps.core.auditoria import SISTEMA, UsuarioAuditoria
 class ModeloBase(models.Model):
     """Base das tabelas com as colunas de auditoria do SGP."""
 
-    criado_em = models.DateTimeField()
-    criado_por = models.CharField(max_length=200)
-    criado_rf = models.CharField(max_length=200)
-    alterado_em = models.DateTimeField(null=True, blank=True)
-    alterado_por = models.CharField(max_length=200, null=True, blank=True)
-    alterado_rf = models.CharField(max_length=200, null=True, blank=True)
-    excluido = models.BooleanField(default=False)
-    codigo_uuid = models.UUIDField(null=True, blank=True, unique=True)
+    criado_em = models.DateTimeField(db_default=Now())
+    criado_por = models.CharField(max_length=200, null=True)
+    criado_rf = models.CharField(max_length=100, null=True)
+    alterado_em = models.DateTimeField(null=True)
+    alterado_por = models.CharField(max_length=200, null=True)
+    alterado_rf = models.CharField(max_length=100, null=True)
+    excluido = models.BooleanField(default=False, db_default=False)
+    codigo_uuid = models.UUIDField(null=True, unique=True)
 
     class Meta:
         """Não cria tabela para a base."""
