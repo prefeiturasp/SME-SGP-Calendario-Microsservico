@@ -1,10 +1,13 @@
 """Testes dos models do app calendario."""
 
+from typing import cast
+
 from django.db import models
 from django.db.models.functions import Now
 from django.test import SimpleTestCase
 
 from apps.calendario.models import Modalidade, TipoCalendario
+from apps.core.models import ModeloBase
 
 
 class TestModalidade(SimpleTestCase):
@@ -34,6 +37,10 @@ class TestModalidade(SimpleTestCase):
 class TestTipoCalendario(SimpleTestCase):
     """Valida o mapeamento do model de tipo de calendário."""
 
+    def test_herda_modelo_base(self) -> None:
+        """Disponibiliza o contrato compartilhado de auditoria."""
+        self.assertTrue(issubclass(TipoCalendario, ModeloBase))
+
     def test_mapeia_tabela_gerenciada(self) -> None:
         """Mapeia a tabela do schema calendario."""
         self.assertEqual(TipoCalendario._meta.db_table, "tipo_calendario")
@@ -59,7 +66,10 @@ class TestTipoCalendario(SimpleTestCase):
 
         for nome, tipo in tipos.items():
             with self.subTest(nome=nome):
-                campo = TipoCalendario._meta.get_field(nome)
+                campo = cast(
+                    "models.Field[object, object]",
+                    TipoCalendario._meta.get_field(nome),
+                )
                 self.assertIsInstance(campo, tipo)
                 self.assertFalse(campo.null)
 
@@ -88,7 +98,10 @@ class TestTipoCalendario(SimpleTestCase):
 
         for nome in nomes:
             with self.subTest(nome=nome):
-                campo = TipoCalendario._meta.get_field(nome)
+                campo = cast(
+                    "models.Field[object, object]",
+                    TipoCalendario._meta.get_field(nome),
+                )
                 self.assertIsInstance(campo, models.IntegerField)
                 self.assertTrue(campo.null)
 
@@ -113,7 +126,10 @@ class TestTipoCalendario(SimpleTestCase):
 
         for nome, limite in limites.items():
             with self.subTest(nome=nome):
-                campo = TipoCalendario._meta.get_field(nome)
+                campo = cast(
+                    "models.Field[object, object]",
+                    TipoCalendario._meta.get_field(nome),
+                )
                 self.assertIsInstance(campo, models.CharField)
                 self.assertEqual(campo.max_length, limite)
                 self.assertTrue(campo.null)

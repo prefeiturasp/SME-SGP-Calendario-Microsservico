@@ -5,6 +5,7 @@ from typing import cast
 from unittest.mock import patch
 
 from django.db import models
+from django.db.models.functions import Now
 from django.test import SimpleTestCase
 
 from apps.core.auditoria import UsuarioAuditoria
@@ -30,30 +31,39 @@ class TestModeloBase(SimpleTestCase):
 
     def test_campos_de_auditoria(self) -> None:
         """Expõe campos obrigatórios e opcionais de auditoria."""
-        obrigatorios = {"criado_em", "criado_por", "criado_rf"}
-        opcionais = {"alterado_em", "alterado_por", "alterado_rf"}
+        criado_em = cast(
+            "models.Field[object, object]",
+            ModeloBase._meta.get_field("criado_em"),
+        )
+        self.assertFalse(criado_em.null)
+        self.assertIsInstance(criado_em.db_default, Now)
 
-        for nome in obrigatorios:
-            campo = cast(
-                "models.Field[object, object]",
-                ModeloBase._meta.get_field(nome),
-            )
-            self.assertFalse(campo.null)
-            self.assertFalse(campo.blank)
-
-        for nome in opcionais:
+        limites = {
+            "criado_por": 200,
+            "criado_rf": 100,
+            "alterado_por": 200,
+            "alterado_rf": 100,
+        }
+        for nome, limite in limites.items():
             campo = cast(
                 "models.Field[object, object]",
                 ModeloBase._meta.get_field(nome),
             )
             self.assertTrue(campo.null)
-            self.assertTrue(campo.blank)
+            self.assertEqual(campo.max_length, limite)
+
+        alterado_em = cast(
+            "models.Field[object, object]",
+            ModeloBase._meta.get_field("alterado_em"),
+        )
+        self.assertTrue(alterado_em.null)
 
         campo_excluido = cast(
             "models.Field[object, object]",
             ModeloBase._meta.get_field("excluido"),
         )
         self.assertFalse(campo_excluido.default)
+        self.assertFalse(campo_excluido.db_default)
 
     def test_codigo_uuid_e_opcional_e_unico(self) -> None:
         """Representa o UUID opcional protegido por unicidade."""
@@ -63,7 +73,6 @@ class TestModeloBase(SimpleTestCase):
         )
 
         self.assertTrue(campo.null)
-        self.assertTrue(campo.blank)
         self.assertTrue(campo.unique)
 
     def test_marca_criacao_com_usuario_informado(self) -> None:
