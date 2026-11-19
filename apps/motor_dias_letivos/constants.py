@@ -71,7 +71,7 @@ MENSAGENS_VIOLACAO = {
     ),
     CodigoViolacao.FORA_DO_ANO_LETIVO: (
         "{n}º bimestre: as datas devem estar entre 01/01/{ano} e "
-        "31/12/{ano_seguinte}."
+        "31/12/{ano}."
     ),
     CodigoViolacao.SOBREPOSICAO: (
         "O início do {n}º bimestre não pode ser anterior ao fim do {m}º "

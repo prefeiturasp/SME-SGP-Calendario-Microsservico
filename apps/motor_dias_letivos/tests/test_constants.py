@@ -78,14 +78,14 @@ class ConstantesMotorTest(SimpleTestCase):
         )
 
     def test_mensagem_de_ano_letivo(self) -> None:
-        """Preenche o ano letivo e o ano seguinte."""
+        """Preenche o ano letivo nas duas datas."""
         mensagem = MENSAGENS_VIOLACAO[
             CodigoViolacao.FORA_DO_ANO_LETIVO
-        ].format(n=4, ano=2026, ano_seguinte=2027)
+        ].format(n=4, ano=2026)
         self.assertEqual(
             mensagem,
             "4º bimestre: as datas devem estar entre 01/01/2026 e "
-            "31/12/2027.",
+            "31/12/2026.",
         )
 
     def test_mensagem_de_periodo_sem_politica(self) -> None:
