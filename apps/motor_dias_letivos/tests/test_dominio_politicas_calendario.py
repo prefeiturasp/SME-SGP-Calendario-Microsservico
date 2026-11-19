@@ -262,7 +262,9 @@ class ValidarBimestresTest(SimpleTestCase):
 
     def test_calendario_95_valido(self) -> None:
         """Aceita os bimestres reais do calendário 95."""
-        self.assertEqual(self.anual.validar_bimestres(TESTE_BIMESTRES, ANO), [])
+        self.assertEqual(
+            self.anual.validar_bimestres(TESTE_BIMESTRES, ANO), []
+        )
 
     def test_ordem_de_entrada_nao_importa(self) -> None:
         """Aceita os bimestres fora de ordem."""
@@ -297,7 +299,11 @@ class ValidarBimestresTest(SimpleTestCase):
 
     def test_numero_repetido_uma_vez_por_numero(self) -> None:
         """Aponta cada número repetido uma vez só."""
-        repetidos = (*TESTE_BIMESTRES[:3], TESTE_BIMESTRES[2], TESTE_BIMESTRES[2])
+        repetidos = (
+            *TESTE_BIMESTRES[:3],
+            TESTE_BIMESTRES[2],
+            TESTE_BIMESTRES[2],
+        )
         violacoes = self.anual.validar_bimestres(repetidos, ANO)
         self.assertEqual(
             [v.mensagem for v in violacoes if v.codigo == "NUMERO_REPETIDO"],
