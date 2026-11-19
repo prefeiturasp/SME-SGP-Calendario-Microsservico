@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "apps.core",
     "apps.calendario",
     "apps.eventos",
+    "apps.motor_dias_letivos",
 ]
 
 MIDDLEWARE = [
