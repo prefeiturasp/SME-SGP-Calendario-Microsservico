@@ -36,7 +36,7 @@ def codigos(violacoes: list) -> list[str]:
 
 
 class ObterPoliticaTest(SimpleTestCase):
-    """Confere a política escolhida pelo período do calendário (RN01)."""
+    """Confere a política escolhida pelo período do calendário."""
 
     def test_anual(self) -> None:
         """Usa 4 bimestres e mínimo de 200 dias no anual."""
@@ -65,7 +65,7 @@ class ObterPoliticaTest(SimpleTestCase):
 
 
 class ValidarBimestreTest(SimpleTestCase):
-    """Valida um bimestre salvo de cada vez (RN02 a RN05)."""
+    """Valida um bimestre salvo de cada vez."""
 
     anual = PoliticaCalendarioAnual()
     semestral = PoliticaCalendarioSemestral()
@@ -202,7 +202,7 @@ class ValidarBimestreTest(SimpleTestCase):
         )
 
     def test_mesmo_dia_aceito(self) -> None:
-        """Aceita o 2º começando no mesmo dia em que o 1º termina (RN05)."""
+        """Aceita o 2º começando no mesmo dia em que o 1º termina."""
         violacoes = self.anual.validar_bimestre(
             bimestre(2, date(2026, 4, 30), date(2026, 7, 4)),
             [TESTE_BIMESTRES[0]],
@@ -255,7 +255,7 @@ class ValidarBimestreTest(SimpleTestCase):
 
 
 class ValidarBimestresTest(SimpleTestCase):
-    """Valida todos os bimestres do calendário juntos (RN02 a RN06)."""
+    """Valida todos os bimestres do calendário juntos."""
 
     anual = PoliticaCalendarioAnual()
     semestral = PoliticaCalendarioSemestral()
@@ -347,7 +347,7 @@ class ValidarBimestresTest(SimpleTestCase):
 
 
 class BimestresSobrepostosTest(SimpleTestCase):
-    """Confere a comparação de cada bimestre com o anterior (RN05)."""
+    """Confere a comparação de cada bimestre com o anterior."""
 
     def test_sem_sobreposicao(self) -> None:
         """Não aponta nada no calendário 95."""

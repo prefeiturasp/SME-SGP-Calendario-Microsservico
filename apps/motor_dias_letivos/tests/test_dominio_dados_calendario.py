@@ -1,6 +1,6 @@
 """Testes dos dados de entrada do motor de dias letivos."""
 
-from dataclasses import FrozenInstanceError
+from dataclasses import FrozenInstanceError, replace
 from datetime import date
 
 from django.test import SimpleTestCase
@@ -112,3 +112,61 @@ class EscopoValoresTest(SimpleTestCase):
             Escopo(tipo_calendario_id=95, ue_codigo=None),
         }
         self.assertEqual(len(escopos), 1)
+
+
+class EventoTest(SimpleTestCase):
+    """Confere o escopo e os dias do evento."""
+
+    def test_escopo_da_ue(self) -> None:
+        """Identifica evento da UE."""
+        evento = criar_evento()
+        self.assertTrue(evento.eh_da_ue)
+        self.assertFalse(evento.eh_da_sme)
+
+    def test_escopo_da_sme(self) -> None:
+        """Identifica evento sem DRE e sem UE como da SME."""
+        evento = replace(criar_evento(), dre_codigo=None, ue_codigo=None)
+        self.assertTrue(evento.eh_da_sme)
+        self.assertFalse(evento.eh_da_ue)
+
+    def test_escopo_da_dre(self) -> None:
+        """Não trata evento só com DRE como da SME nem da UE."""
+        evento = replace(criar_evento(), ue_codigo=None)
+        self.assertFalse(evento.eh_da_sme)
+        self.assertFalse(evento.eh_da_ue)
+
+    def test_dias_do_evento(self) -> None:
+        """Lista todos os dias, com início e fim."""
+        evento = replace(
+            criar_evento(), inicio=date(2026, 3, 30), fim=date(2026, 4, 1)
+        )
+        self.assertEqual(
+            evento.dias(),
+            [date(2026, 3, 30), date(2026, 3, 31), date(2026, 4, 1)],
+        )
+
+    def test_evento_invertido_sem_dias(self) -> None:
+        """Não tem dias quando o início é depois do fim."""
+        evento = replace(
+            criar_evento(), inicio=date(2026, 4, 1), fim=date(2026, 3, 30)
+        )
+        self.assertEqual(evento.dias(), [])
+
+    def test_cobre_o_dia(self) -> None:
+        """Cobre os dias entre o início e o fim, inclusive."""
+        evento = criar_evento()
+        self.assertTrue(evento.cobre(date(2026, 3, 7)))
+        self.assertFalse(evento.cobre(date(2026, 3, 8)))
+
+
+class BimestreTest(SimpleTestCase):
+    """Confere os dias cobertos pelo bimestre."""
+
+    def test_cobre_inicio_e_fim(self) -> None:
+        """Cobre o primeiro e o último dia."""
+        bimestre = Bimestre(
+            numero=1, inicio=date(2026, 2, 4), fim=date(2026, 4, 30)
+        )
+        self.assertTrue(bimestre.cobre(date(2026, 2, 4)))
+        self.assertTrue(bimestre.cobre(date(2026, 4, 30)))
+        self.assertFalse(bimestre.cobre(date(2026, 5, 1)))

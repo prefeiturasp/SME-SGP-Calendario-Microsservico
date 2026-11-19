@@ -32,7 +32,7 @@ class ConstantesMotorTest(SimpleTestCase):
         )
 
     def test_isentos_de_validacao_de_data(self) -> None:
-        """Isenta só Recesso e Reposição no Recesso (RN24)."""
+        """Isenta só Recesso e Reposição no Recesso."""
         self.assertEqual(
             TIPOS_ISENTOS_VALIDACAO_DATA,
             {TipoEvento.RECESSO, TipoEvento.REPOSICAO_NO_RECESSO},

@@ -1,7 +1,13 @@
 """Dados que o motor de dias letivos recebe."""
 
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, timedelta
+
+
+def _dias_entre(inicio: date, fim: date) -> list[date]:
+    return [
+        inicio + timedelta(days=dia) for dia in range((fim - inicio).days + 1)
+    ]
 
 
 @dataclass(frozen=True)
@@ -23,6 +29,10 @@ class Bimestre:
     inicio: date
     fim: date
 
+    def cobre(self, dia: date) -> bool:
+        """Verifica se o dia está dentro do bimestre."""
+        return self.inicio <= dia <= self.fim
+
 
 @dataclass(frozen=True)
 class Evento:
@@ -41,6 +51,24 @@ class Evento:
     fim: date
     dre_codigo: str | None
     ue_codigo: str | None
+
+    @property
+    def eh_da_sme(self) -> bool:
+        """Indica evento da SME, sem DRE e sem UE."""
+        return self.dre_codigo is None and self.ue_codigo is None
+
+    @property
+    def eh_da_ue(self) -> bool:
+        """Indica evento de uma UE."""
+        return self.ue_codigo is not None
+
+    def dias(self) -> list[date]:
+        """Lista os dias do evento; vazia se o início é depois do fim."""
+        return _dias_entre(self.inicio, self.fim)
+
+    def cobre(self, dia: date) -> bool:
+        """Verifica se o dia está dentro do evento."""
+        return self.inicio <= dia <= self.fim
 
 
 @dataclass(frozen=True)

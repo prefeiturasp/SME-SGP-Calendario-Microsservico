@@ -9,6 +9,18 @@ TIPOS_ISENTOS_VALIDACAO_DATA = frozenset(
 )
 
 
+TIPOS_PERMITIDOS_FORA_DO_BIMESTRE = frozenset(
+    {
+        TipoEvento.FERIAS_DOCENTES,
+        TipoEvento.RECREIO_NAS_FERIAS,
+        TipoEvento.RECESSO,
+        TipoEvento.ORGANIZACAO_ESCOLAR,
+        TipoEvento.FERIADO,
+        TipoEvento.FECHAMENTO_BIMESTRE,
+    }
+)
+
+
 class Motivo(StrEnum):
     """Motivo da decisão gravada para cada data da visão."""
 
@@ -54,6 +66,7 @@ class CodigoViolacao(StrEnum):
     EVENTO_INICIO_APOS_FIM = "EVENTO_INICIO_APOS_FIM"
     LIBERACAO_FORA_DO_PERIODO = "LIBERACAO_FORA_DO_PERIODO"
     FORA_DO_BIMESTRE = "FORA_DO_BIMESTRE"
+    TIPO_FORA_DO_BIMESTRE = "TIPO_FORA_DO_BIMESTRE"
     DATA_TRAVADA_PELA_SME = "DATA_TRAVADA_PELA_SME"
     FERIADO_SEM_LIBERACAO = "FERIADO_SEM_LIBERACAO"
     DOMINGO_SEM_LIBERACAO = "DOMINGO_SEM_LIBERACAO"
@@ -94,6 +107,10 @@ MENSAGENS_VIOLACAO = {
     ),
     CodigoViolacao.FORA_DO_BIMESTRE: (
         "O evento letivo precisa estar dentro de um bimestre."
+    ),
+    CodigoViolacao.TIPO_FORA_DO_BIMESTRE: (
+        "Fora do bimestre só podem ser cadastrados Férias Docentes, "
+        "Recreio nas Férias, Recesso e Organização."
     ),
     CodigoViolacao.DATA_TRAVADA_PELA_SME: (
         "A SME definiu esta data como não letiva."
